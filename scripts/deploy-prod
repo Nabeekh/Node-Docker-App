@@ -1,0 +1,14 @@
+#!/bin/bash
+# deploy code to production machine
+
+set -e
+set -x
+
+. `dirname $0`/.conf-prod
+
+# build new image before turning down the running app
+# this avoids deployment downtime
+docker build . -t APPNAME
+
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans

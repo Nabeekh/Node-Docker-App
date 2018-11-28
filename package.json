@@ -1,0 +1,22 @@
+{
+  "name": "docker-app",
+  "version": "1.0.0",
+  "description": "The basic app setup with nodejs expressjs mongodb running inside a docker container",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:docker": "sudo docker-compose build && sudo docker-compose up",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "docker",
+    "node"
+  ],
+  "author": "nabeekh",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongodb": "^3.1.10",
+    "mongoose": "^5.3.14"
+  }
+}
