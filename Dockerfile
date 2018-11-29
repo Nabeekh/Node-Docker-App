@@ -1,7 +1,7 @@
 FROM node:8.11.4
-WORKDIR /app
-COPY package.json /app
+WORKDIR /APPNAME
+COPY package.json /APPNAME
 RUN npm install
-COPY . /app
+COPY . /APPNAME
 CMD npm start
 EXPOSE 8081
