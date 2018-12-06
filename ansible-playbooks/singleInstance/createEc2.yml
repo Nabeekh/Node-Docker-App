@@ -1,0 +1,30 @@
+---
+- name: Create a new EC2 instance
+  hosts: localhost
+  gather_facts: False
+
+  vars:
+      region: us-east-1  # us-east-2
+      instance_type: t2.medium #instance type 
+      ami: ami-f4cc1de2  # Ubuntu 16.04 LTS
+      keypair: appinstance # pem file name which will be associated with this
+      security_group: default # security group name
+      vpc_subnet: subnet-08d1d0aff4d4bcb41 #vpc subnet id 
+  
+  tasks:
+    - name: Create an ec2 instance
+      ec2:
+         key_name: "{{ keypair }}"
+         group: "{security_group}"  # security group name
+         instance_type: "{{ instance_type}}"
+         image: "{{ ami }}"
+         wait: true
+         region: "{{ region }}"
+         count: 1  # default
+         count_tag:
+            Name: APP
+         instance_tags:
+            Name: APP #instance name 
+         vpc_subnet_id: "{vpc_subnet}"
+         assign_public_ip: yes
+      register: ec2 #this will do the magic
