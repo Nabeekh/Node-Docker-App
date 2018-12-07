@@ -1,0 +1,41 @@
+- name: Setting up  Application
+  hosts: webserver
+  any_errors_fatal: yes
+  gather_facts: false
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+  vars_prompt:
+   - name: "gitUserName"
+     prompt: "Enter your github username ! "
+     private: no
+     failed_when: "gitUserName == ''"
+   - name: "gitPassword"
+     prompt: "Enter you github password ! "
+     private: no
+     failed_when: "gitPassword == ''"
+   - name: "CLONEURL"
+     prompt: "Enter your github clone url ! "
+     private: no
+     failed_when: "CLONEURL == ''"
+   - name: "Directory"
+     prompt: "Enter your directory name ! "
+     private: no
+     failed_when: "Directory == ''"
+  tasks:
+    - name: verify credentials 
+      when: gitUserName == ""
+      fail: msg="Invalid github username or password"
+
+    - name: Setup github credentials
+      shell: git config --global user.email {{gitUserName}} && git config --global user.password {{gitPassword}}
+
+    - name: Clone Repo
+      shell: git clone {{CLONEURL}}
+
+    - name: Install npm modules
+      shell: cd {{Directory}} && npm install
+
+    - name: Starting App
+      shell: cd {{Directory}} && pm2 start npm -- start
+    - include: ngnix/main.yml 
