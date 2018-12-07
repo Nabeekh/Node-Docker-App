@@ -1,0 +1,36 @@
+- name: Deploy  Application
+  hosts: webserver
+  any_errors_fatal: yes
+  gather_facts: false
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+  vars:
+    appDir: Node-Docker-App
+  vars_prompt:
+   - name: "BranchName"
+     prompt: "Enter branch name you want to deploy. Default "
+     default: "master"
+     private: no
+     failed_when: "BranchName == ''"
+   - name: "Origin"
+     prompt: "Enter origin. Default"
+     default: "origin"
+     private: no
+     failed_when: "Origin == ''"
+   - name: "Modules"
+     prompt: "Would you like to install node modules? Answer YES. "
+     default: "NO"
+     private: no
+     failed_when: "Modules != 'YES'" 
+  tasks:
+    - name: Pull and Deploy
+      shell: cd {{appDir}} && git pull {{Origin}} {{BranchName}}
+
+    - name: Install npm modules
+      when: "Modules == 'YES'"
+      shell: cd {{Directory}} && npm install
+
+    - name: Restarting App
+      shell: pm2 restart server
+

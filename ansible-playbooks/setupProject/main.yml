@@ -37,5 +37,5 @@
       shell: cd {{Directory}} && npm install
 
     - name: Starting App
-      shell: cd {{Directory}} && pm2 start npm -- start
+      shell: cd {{Directory}} && pm2 start server.js
     - include: ngnix/main.yml 
