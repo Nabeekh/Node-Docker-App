@@ -1,1 +1,3 @@
 node_modules/
+
+ansible-playbooks/awsCloudFormation/aws-private.pem
